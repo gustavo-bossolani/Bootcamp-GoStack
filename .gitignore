@@ -2,3 +2,8 @@ modulo01/wget-log
 modulo01/node_modules
 modulo01/yarn-error.log
 modulo01/.vscode
+
+modulo01/desafio01-conceitosNode/node_modules
+modulo01/desafio01-conceitosNode/yarn-error.log
+modulo01/desafio01-conceitosNode/.vscode
+modulo01/desafio01-conceitosNode/wget-log
