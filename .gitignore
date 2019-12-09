@@ -7,3 +7,10 @@ modulo01/desafio01-conceitosNode/node_modules
 modulo01/desafio01-conceitosNode/yarn-error.log
 modulo01/desafio01-conceitosNode/.vscode
 modulo01/desafio01-conceitosNode/wget-log
+
+modulo02/GoBarber/node_modules
+modulo02/GoBarber/yarn-error.log
+modulo02/GoBarber/.vscode
+modulo02/GoBarber/wget-log
+
+/wget-log*
