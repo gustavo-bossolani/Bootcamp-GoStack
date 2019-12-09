@@ -5,7 +5,7 @@ const routes = new Router();
 
 
 routes.get('/', (req, resp) =>{
-    return resp.json({ mensagem: "Olá Mundo!" });
+    return resp.json({ mensagem: "Olá World!" });
 });
 
 
