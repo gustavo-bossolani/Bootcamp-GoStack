@@ -1,16 +1,10 @@
 import { Router } from 'express';
-import User from "./app/models/User";
+import User from './app/models/User';
 
 const routes = new Router();
 
-let teste = 0;
 routes.get('/', async (req, resp) => {
-
-    const user = await User.create({
-        name: 'teste',
-        email: 'teste@email.com',
-        password_hash: '1312',
-    });
+    const user = await User.create(req.body);
     return resp.json(user);
 });
 
