@@ -9,7 +9,7 @@ export default async (req, resp, next) => {
     if (!authHeader) {
         return resp
             .status(401)
-            .json({ erroo: 'Token não autorizado ou enviado.' });
+            .json({ error: 'Token não autorizado ou enviado.' });
     }
 
     // Usando desestruturação para ignorar o primeiro parâmetro
