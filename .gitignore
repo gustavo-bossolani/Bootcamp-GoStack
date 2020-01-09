@@ -13,4 +13,9 @@ modulo02/GoBarber/yarn-error.log
 modulo02/GoBarber/.vscode
 modulo02/GoBarber/wget-log
 
+modulo03/GoBarber/node_modules
+modulo03/GoBarber/yarn-error.log
+modulo03/GoBarber/.vscode
+modulo03/GoBarber/wget-log
+
 /wget-log*
