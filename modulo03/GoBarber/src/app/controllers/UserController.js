@@ -1,6 +1,7 @@
 import * as Yup from 'yup';
 
 import User from '../models/User';
+import File from '../models/File';
 
 class UserController {
     async store(req, resp) {
@@ -52,10 +53,23 @@ class UserController {
             confirmPassword: Yup.string().when('password', (password, field) =>
                 password ? field.required().oneOf([Yup.ref('password')]) : field
             ),
+            avatar_id: Yup.number()
+                .integer()
+                .moreThan(0, 'Endereço de avatar inválido.'),
         });
 
         if (!(await schema.isValid(req.body))) {
             return resp.status(400).json({ error: 'Erro de validação.' });
+        }
+
+        // Verificando id do avatar
+        const { avatar_id: avatar } = req.body;
+        if (avatar) {
+            const file = await File.findByPk(avatar);
+            if (!file)
+                return resp
+                    .status(400)
+                    .json({ error: 'Endereço de avatar inválido.' });
         }
 
         const { email, oldPassword } = req.body;
