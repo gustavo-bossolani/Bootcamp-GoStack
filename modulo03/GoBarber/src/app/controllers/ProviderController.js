@@ -10,7 +10,7 @@ class ProviderController {
                 {
                     model: File,
                     as: 'avatar',
-                    attributes: ['id', 'name', 'path', 'url', 'url_teste'],
+                    attributes: ['id', 'name', 'path', 'url'],
                 },
             ],
         });
