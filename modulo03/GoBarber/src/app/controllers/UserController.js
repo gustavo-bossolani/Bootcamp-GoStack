@@ -55,7 +55,7 @@ class UserController {
             ),
             avatar_id: Yup.number()
                 .integer()
-                .moreThan(0, 'Endereço de avatar inválido.'),
+                .moreThan(0, 'Identificador de avatar inválido.'),
         });
 
         if (!(await schema.isValid(req.body))) {
@@ -69,7 +69,7 @@ class UserController {
             if (!file)
                 return resp
                     .status(400)
-                    .json({ error: 'Endereço de avatar inválido.' });
+                    .json({ error: 'Identificador de avatar inválido.' });
         }
 
         const { email, oldPassword } = req.body;
