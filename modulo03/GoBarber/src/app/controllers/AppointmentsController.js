@@ -1,7 +1,9 @@
 import * as Yup from 'yup';
 import { startOfHour, parseISO, isBefore } from 'date-fns';
+
 import User from '../models/User';
 import Appointment from '../models/Appointment';
+import File from '../models/File';
 
 class AppointmentsController {
     async store(req, resp) {
@@ -58,6 +60,31 @@ class AppointmentsController {
         });
 
         return resp.json(appointment);
+    }
+
+    async index(req, resp) {
+        // Recuperando a numeracao da pagina pelos query params
+        const { page = 1 } = req.query;
+
+        const appointments = await Appointment.findAll({
+            where: { user_id: req.userId, canceled_at: null },
+            order: ['date'],
+            attributes: ['id', 'date'],
+            limit: 20,
+            offset: (page - 1) * 20,
+            include: {
+                model: User,
+                as: 'provider',
+                attributes: ['name', 'email'],
+                include: {
+                    model: File,
+                    as: 'avatar',
+                    attributes: ['id', 'path', 'url'],
+                },
+            },
+        });
+
+        return resp.json(appointments);
     }
 }
 
