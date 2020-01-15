@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-import { startOfHour, parseISO, isBefore, format } from 'date-fns';
+import { startOfHour, parseISO, isBefore, format, subHours } from 'date-fns';
 import pt from 'date-fns/locale/pt';
 
 import User from '../models/User';
@@ -108,6 +108,31 @@ class AppointmentsController {
         });
 
         return resp.json(appointments);
+    }
+
+    async delete(req, resp) {
+        const appointment = await Appointment.findByPk(req.params.id);
+
+        if (appointment.user_id !== req.userId) {
+            return resp.jsonstatus(401).json({
+                error: 'Agendamento pode ser cancelado apenas pelo dono.',
+            });
+        }
+
+        const dateWithSub = subHours(appointment.date, 2);
+
+        if (isBefore(dateWithSub, new Date())) {
+            return resp.jsonstatus(401).json({
+                error:
+                    'Agendamentos só podem ser cancelado com 2 horas de antecedência.',
+            });
+        }
+
+        appointment.canceled_at = new Date();
+
+        await appointment.save();
+
+        return resp.json(appointment);
     }
 }
 

@@ -23,8 +23,10 @@ routes.use(authMiddleware);
 routes.put('/users', UserController.update);
 routes.get('/providers', ProviderController.index);
 routes.post('/files', upload.single('file'), FileController.store);
+
 routes.post('/appointments', AppointmentsController.store);
 routes.get('/appointments', AppointmentsController.index);
+routes.delete('/appointments/:id', AppointmentsController.delete);
 
 routes.get('/schedules', ScheduleController.index);
 
