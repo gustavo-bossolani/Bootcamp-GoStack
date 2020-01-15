@@ -119,6 +119,7 @@ class AppointmentsController {
             });
         }
 
+        // Reduzindo 2 horas da data do agendamento
         const dateWithSub = subHours(appointment.date, 2);
 
         if (isBefore(dateWithSub, new Date())) {
