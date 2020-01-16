@@ -120,11 +120,16 @@ class AppointmentsController {
                     as: 'provider',
                     attributes: ['name', 'email'],
                 },
+                {
+                    model: User,
+                    as: 'user',
+                    attributes: ['name'],
+                },
             ],
         });
 
         if (appointment.user_id !== req.userId) {
-            return resp.jsonstatus(401).json({
+            return resp.status(401).json({
                 error: 'Agendamento pode ser cancelado apenas pelo dono.',
             });
         }
@@ -133,7 +138,7 @@ class AppointmentsController {
         const dateWithSub = subHours(appointment.date, 2);
 
         if (isBefore(dateWithSub, new Date())) {
-            return resp.jsonstatus(401).json({
+            return resp.status(401).json({
                 error:
                     'Agendamentos só podem ser cancelado com 2 horas de antecedência.',
             });
@@ -144,10 +149,20 @@ class AppointmentsController {
         await appointment.save();
 
         // Enviando Email para o provider indicando cancelamento
+        // Adicionando template de email
         await Mail.sendMail({
             to: `${appointment.provider.name} <${appointment.provider.email}>`,
             subject: 'Agendamento Cancelado',
-            text: 'Você tem um novo cancelamento',
+            template: 'cancellation',
+            context: {
+                provider: appointment.provider.name,
+                user: appointment.user.name,
+                date: format(
+                    appointment.date,
+                    "'dia' dd 'de' MMMM', ás' H:mm'h.'",
+                    { locale: pt }
+                ),
+            },
         });
 
         return resp.json(appointment);
