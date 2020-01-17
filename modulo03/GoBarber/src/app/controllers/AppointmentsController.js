@@ -8,7 +8,8 @@ import File from '../models/File';
 
 import Notification from '../schemas/Notification';
 
-import Mail from '../../lib/Mail';
+import CancellationMail from '../jobs/CancellationMail';
+import Queue from '../../lib/Queue';
 
 class AppointmentsController {
     async store(req, resp) {
@@ -149,20 +150,8 @@ class AppointmentsController {
         await appointment.save();
 
         // Enviando Email para o provider indicando cancelamento
-        // Adicionando template de email
-        await Mail.sendMail({
-            to: `${appointment.provider.name} <${appointment.provider.email}>`,
-            subject: 'Agendamento Cancelado',
-            template: 'cancellation',
-            context: {
-                provider: appointment.provider.name,
-                user: appointment.user.name,
-                date: format(
-                    appointment.date,
-                    "'dia' dd 'de' MMMM', ás' H:mm'h.'",
-                    { locale: pt }
-                ),
-            },
+        await Queue.add(CancellationMail.key, {
+            appointment,
         });
 
         return resp.json(appointment);
