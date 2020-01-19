@@ -1,16 +1,32 @@
-<div style="
-    color:royalblue;
-    ">
+<strong id="provider-name">Olá, {{ provider }}</strong>
+<p id="message-detail">
+    Houve um cancelamento de horário, confira os detalhes abaixo:
+</p>
+<p>
+    <strong>Cliente: </strong> {{ user }} <br/>
+    <strong>Data/hora</strong> {{ date }} <br/>
+    <small>
+        Horário está novamente disponível para novos agendamentos.
+    </small>
+</p>
 
-    <strong>Olá, {{ provider }}</strong>
-    <p>
-        Houve um cancelamento de horário, confira os detalhes abaixo:
-    </p>
-    <p>
-        <strong>Cliente: </strong> {{ user }} <br/>
-        <strong>Data/hora</strong> {{ date }} <br/>
-        <small>
-            Horário está novamente disponível para novos agendamentos.
-        </small>
-    </p>
-</div>
+<style>
+    #message-detail {
+        margin: 0;
+    }
+    #provider-name {
+        font-size: 28px;
+    }
+    strong {
+        color: royalblue;
+        font-size: 18px;
+    }
+    small {
+        color: rgb(43, 82, 201);
+    }
+    body {
+        padding: 3%;
+    }
+
+
+</style>
