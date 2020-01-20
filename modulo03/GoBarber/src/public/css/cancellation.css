@@ -1,0 +1,16 @@
+#message-detail {
+    margin: 0;
+}
+#provider-name {
+    font-size: 28px;
+}
+strong {
+    color: royalblue;
+    font-size: 18px;
+}
+small {
+    color: rgb(43, 82, 201);
+}
+body {
+    padding: 3%;
+}

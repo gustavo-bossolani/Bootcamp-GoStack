@@ -1,7 +1,7 @@
 module.exports = {
     dialect: 'mysql',
     host: 'localhost',
-    username: 'gustavo',
+    username: 'root',
     password: 'root',
     database: 'gobarber',
     define: {
