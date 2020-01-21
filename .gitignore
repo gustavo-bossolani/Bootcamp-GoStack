@@ -21,3 +21,4 @@ modulo03/GoBarber/tmp/uploads/*
 
 
 /wget-log*
+*.env
