@@ -19,6 +19,11 @@ modulo03/GoBarber/.vscode
 modulo03/GoBarber/wget-log
 modulo03/GoBarber/tmp/uploads/*
 
+modulo04/node_modules
+modulo04/yarn-error.log
+modulo04/.vscode
+modulo04/wget-log
+modulo04/tmp/uploads/*
 
 /wget-log*
 *.env
