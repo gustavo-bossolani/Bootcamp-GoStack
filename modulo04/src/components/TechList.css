@@ -1,0 +1,23 @@
+img {
+  width: 400px;
+  float: left;
+  margin-right: 30px;
+}
+h1, h2 {
+    margin: 0;
+}
+
+button[type="button"] {
+    margin-left: 10px;
+    background: purple;
+    color: white;
+    border: none;
+    border-radius: 7px;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+button[type="button"]:hover {
+    background: rgb(187, 128, 187);
+    color: black;
+    cursor: pointer;
+}
