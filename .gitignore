@@ -25,5 +25,11 @@ modulo04/.vscode
 modulo04/wget-log
 modulo04/tmp/uploads/*
 
+modulo05/node_modules
+modulo05/yarn-error.log
+modulo05/.vscode
+modulo05/wget-log
+modulo05/tmp/uploads/*
+
 /wget-log*
 *.env
