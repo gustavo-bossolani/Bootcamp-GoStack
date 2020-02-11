@@ -43,8 +43,6 @@ export default class Main extends Component {
         const { newRepo, repositories } = this.state;
         const response = await api.get(`/repos/${newRepo}`);
 
-        console.log(response);
-
         const data = {
             name: response.data.full_name,
             language: response.data.language,
