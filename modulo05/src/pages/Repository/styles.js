@@ -48,6 +48,13 @@ export const IssueList = styled.ul`
     border-top: 1px solid #eee;
     list-style: none;
 
+    span {
+        font-weight: bold;
+        display: flex;
+        justify-content: center;
+        margin: 0 0 15px 0;
+    }
+
     li {
         display: flex;
         padding: 15px 10px;
@@ -98,5 +105,26 @@ export const IssueList = styled.ul`
         margin-top: 5px;
         font-size: 12px;
         color: #999;
+    }
+`;
+
+export const Filters = styled.div`
+    margin: 0 0 15px 0;
+    display: flex;
+    justify-content: center;
+
+    button {
+        margin: 0 20px;
+        background: none;
+        color: #7159c1;
+        border: 1.5px solid #7159c1;
+        padding: 5px;
+        border-radius: 5px;
+
+        &:focus,
+        &:hover {
+            background: #7159c1;
+            color: #eee;
+        }
     }
 `;

@@ -12,6 +12,7 @@ export default class Main extends Component {
         newRepo: '',
         repositories: [],
         loading: false,
+        error: false,
     };
 
     // Carregar os dados do localStorage
@@ -36,27 +37,37 @@ export default class Main extends Component {
     };
 
     handleSubmit = async event => {
-        event.preventDefault();
+        try {
+            event.preventDefault();
+            this.setState({ loading: true, error: false });
 
-        this.setState({ loading: true });
+            const { newRepo, repositories } = this.state;
+            const response = await api.get(`/repos/${newRepo}`);
 
-        const { newRepo, repositories } = this.state;
-        const response = await api.get(`/repos/${newRepo}`);
+            const data = {
+                name: response.data.full_name,
+            };
 
-        const data = {
-            name: response.data.full_name,
-            language: response.data.language,
-        };
+            const double = repositories.find(
+                element => element.name === data.name
+            );
+            if (double) {
+                this.setState({ newRepo: '' });
+                throw new Error('Repositório Duplaicado.');
+            }
 
-        this.setState({
-            repositories: [...repositories, data],
-            newRepo: '',
-            loading: false,
-        });
+            this.setState({
+                repositories: [...repositories, data],
+                newRepo: '',
+                loading: false,
+            });
+        } catch (err) {
+            this.setState({ loading: false, error: true });
+        }
     };
 
     render() {
-        const { newRepo, loading, repositories } = this.state;
+        const { newRepo, loading, repositories, error } = this.state;
 
         return (
             <Container>
@@ -65,7 +76,7 @@ export default class Main extends Component {
                     Repositórios
                 </h1>
 
-                <Form onSubmit={this.handleSubmit}>
+                <Form onSubmit={this.handleSubmit} error={error ? 1 : 0}>
                     <input
                         type="text"
                         placeholder="Adicionar repositório"
@@ -73,7 +84,7 @@ export default class Main extends Component {
                         onChange={this.handleInputChange}
                     />
 
-                    <SubmitButton loading={loading}>
+                    <SubmitButton loading={loading ? 1 : 0}>
                         {loading ? (
                             <FaSpinner color="#FFF" size={14} />
                         ) : (
@@ -86,7 +97,6 @@ export default class Main extends Component {
                     {repositories.map(repository => (
                         <li key={repository.name}>
                             <span>{repository.name}</span>
-                            <span>{repository.language}</span>
                             <Link
                                 to={`/repository/${encodeURIComponent(
                                     repository.name
