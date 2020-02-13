@@ -1,10 +1,18 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 import api from '../../services/api';
 
 import Container from '../../components/Container';
-import { Loading, Owner, IssueList, Filters } from './styles';
+import {
+    Loading,
+    Owner,
+    IssueList,
+    Filters,
+    Paginator,
+    PaginatorButton,
+} from './styles';
 
 export default class Repository extends Component {
     static propTypes = {
@@ -19,22 +27,24 @@ export default class Repository extends Component {
         repository: {},
         issues: [],
         loading: true,
+        filter: 'all',
+        page: 1,
     };
 
     async componentDidMount() {
         const { match } = this.props;
         const repoName = decodeURIComponent(match.params.repository);
+        const { page, filter } = this.state;
 
         const [repository, issues] = await Promise.all([
             api.get(`/repos/${repoName}`),
             api.get(`/repos/${repoName}/issues`, {
                 params: {
-                    state: 'open',
-                    page: 1,
+                    state: `${filter}`,
+                    page,
                 },
             }),
         ]);
-        console.log(issues);
 
         this.setState({
             repository: repository.data,
@@ -43,27 +53,41 @@ export default class Repository extends Component {
         });
     }
 
-    handleFilter = async filter => {
+    async componentDidUpdate() {
         const { match } = this.props;
         const repoName = decodeURIComponent(match.params.repository);
+        const { page, filter } = this.state;
 
         const [repository, issues] = await Promise.all([
             api.get(`/repos/${repoName}`),
             api.get(`/repos/${repoName}/issues`, {
                 params: {
                     state: `${filter}`,
+                    page,
                 },
             }),
         ]);
+        this.handleList(repository, issues);
+    }
+
+    handleFilter = async event => {
+        const { value: selectedValue } = event.target;
+        this.setState({ filter: selectedValue });
+    };
+
+    handleList = (repository, issues) => {
         this.setState({
             repository: repository.data,
             issues: issues.data,
-            loading: false,
         });
     };
 
+    handlePaginate = async page => {
+        this.setState({ page });
+    };
+
     render() {
-        const { repository, issues, loading } = this.state;
+        const { repository, issues, loading, page } = this.state;
 
         if (loading) {
             return <Loading>Carregando</Loading>;
@@ -81,34 +105,15 @@ export default class Repository extends Component {
                     <p>{repository.description}</p>
                 </Owner>
 
-                <IssueList>
+                <Filters>
                     <span>Buscar Issues por</span>
-                    <Filters>
-                        <button
-                            onClick={() => {
-                                this.handleFilter('all');
-                            }}
-                            type="button"
-                        >
-                            Todas
-                        </button>
-                        <button
-                            onClick={() => {
-                                this.handleFilter('open');
-                            }}
-                            type="button"
-                        >
-                            Abertas
-                        </button>
-                        <button
-                            onClick={() => {
-                                this.handleFilter('closed');
-                            }}
-                            type="button"
-                        >
-                            Fechadas
-                        </button>
-                    </Filters>
+                    <select onChange={this.handleFilter}>
+                        <option value="all">Todas</option>
+                        <option value="open">Abertas</option>
+                        <option value="closed">Fechadas</option>
+                    </select>
+                </Filters>
+                <IssueList>
                     {issues.map(issue => (
                         <li key={String(issue.id)}>
                             <img
@@ -131,6 +136,31 @@ export default class Repository extends Component {
                         </li>
                     ))}
                 </IssueList>
+                <Paginator>
+                    <li>
+                        <PaginatorButton
+                            onClick={() => {
+                                this.handlePaginate(1);
+                            }}
+                            disabled={page < 2 ? 1 : 0}
+                        >
+                            <FaArrowLeft />
+                        </PaginatorButton>
+                    </li>
+                    <li>
+                        <span>{page}</span>
+                    </li>
+                    <li>
+                        <PaginatorButton
+                            onClick={() => {
+                                this.handlePaginate(2);
+                            }}
+                            disabled={page > 1 ? 1 : 0}
+                        >
+                            <FaArrowRight />
+                        </PaginatorButton>
+                    </li>
+                </Paginator>
             </Container>
         );
     }

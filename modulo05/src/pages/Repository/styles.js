@@ -44,8 +44,7 @@ export const Owner = styled.header`
 
 export const IssueList = styled.ul`
     padding: 30px;
-    margin-top: 30px;
-    border-top: 1px solid #eee;
+    margin-top: 15px;
     list-style: none;
 
     span {
@@ -99,6 +98,7 @@ export const IssueList = styled.ul`
             height: 20px;
             padding: 3px 4px;
             margin-left: 10px;
+            display: inherit;
         }
     }
     p {
@@ -109,22 +109,71 @@ export const IssueList = styled.ul`
 `;
 
 export const Filters = styled.div`
-    margin: 0 0 15px 0;
-    display: flex;
-    justify-content: center;
+    margin-top: 35px;
+    padding: 20px;
+    border-top: 1px solid #eee;
+    text-align: center;
 
-    button {
-        margin: 0 20px;
-        background: none;
-        color: #7159c1;
-        border: 1.5px solid #7159c1;
-        padding: 5px;
-        border-radius: 5px;
+    span {
+        font-size: 16px;
+        font-weight: bold;
+        margin-right: 10px;
+    }
 
-        &:focus,
-        &:hover {
+    select {
+        width: 100%;
+        font-size: 14px;
+        padding: 10px;
+        border: 1px solid #eee;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+
+        option:hover {
             background: #7159c1;
-            color: #eee;
         }
+    }
+`;
+
+export const Paginator = styled.ul`
+    list-style: none;
+    display: flex;
+    border-top: 1px solid #eee;
+    padding-top: 20px;
+    margin-top: 15px;
+    justify-content: end;
+
+    li {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        span {
+            font-size: 16px;
+            color: #7159c1;
+        }
+    }
+`;
+export const PaginatorButton = styled.button.attrs(props => ({
+    type: 'button',
+    disabled: props.disabled,
+}))`
+    margin: 0 10px;
+    background: none;
+    color: #7159c1;
+    border: 1.5px solid #7159c1;
+    padding: 12px;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    &:focus,
+    &:hover {
+        background: #7159c1;
+        color: #eee;
+    }
+
+    &[disabled] {
+        cursor: not-allowed;
+        opacity: 0.6;
     }
 `;

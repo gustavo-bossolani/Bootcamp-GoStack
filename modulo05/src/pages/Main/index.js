@@ -53,7 +53,7 @@ export default class Main extends Component {
             );
             if (double) {
                 this.setState({ newRepo: '' });
-                throw new Error('Repositório Duplaicado.');
+                throw new Error('Repositório Duplicado.');
             }
 
             this.setState({
