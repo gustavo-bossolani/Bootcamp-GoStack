@@ -1,12 +1,19 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
+import {
+    FaArrowLeft,
+    FaArrowRight,
+    FaSpinner,
+    FaFrownOpen,
+    FaCheck,
+} from 'react-icons/fa';
 import api from '../../services/api';
 
 import Container from '../../components/Container';
 import {
     Loading,
+    Message,
     Owner,
     IssueList,
     Filters,
@@ -29,6 +36,7 @@ export default class Repository extends Component {
         loading: true,
         filter: 'all',
         page: 1,
+        error: '',
     };
 
     async componentDidMount() {
@@ -36,38 +44,45 @@ export default class Repository extends Component {
         const repoName = decodeURIComponent(match.params.repository);
         const { page, filter } = this.state;
 
-        const [repository, issues] = await Promise.all([
-            api.get(`/repos/${repoName}`),
-            api.get(`/repos/${repoName}/issues`, {
-                params: {
-                    state: `${filter}`,
-                    page,
-                },
-            }),
-        ]);
+        try {
+            const [repository, issues] = await Promise.all([
+                api.get(`/repos/${repoName}`),
+                api.get(`/repos/${repoName}/issues`, {
+                    params: {
+                        state: `${filter}`,
+                        page,
+                    },
+                }),
+            ]);
 
-        this.setState({
-            repository: repository.data,
-            issues: issues.data,
-            loading: false,
-        });
+            this.setState({
+                repository: repository.data,
+                issues: issues.data,
+                loading: false,
+                error: false,
+            });
+        } catch (err) {
+            this.setState({ error: true });
+        }
     }
 
     async componentDidUpdate() {
         const { match } = this.props;
         const repoName = decodeURIComponent(match.params.repository);
-        const { page, filter } = this.state;
+        const { page, filter, error } = this.state;
 
-        const [repository, issues] = await Promise.all([
-            api.get(`/repos/${repoName}`),
-            api.get(`/repos/${repoName}/issues`, {
-                params: {
-                    state: `${filter}`,
-                    page,
-                },
-            }),
-        ]);
-        this.handleList(repository, issues);
+        if (!error) {
+            const [repository, issues] = await Promise.all([
+                api.get(`/repos/${repoName}`),
+                api.get(`/repos/${repoName}/issues`, {
+                    params: {
+                        state: `${filter}`,
+                        page,
+                    },
+                }),
+            ]);
+            this.handleList(repository, issues);
+        }
     }
 
     handleFilter = async event => {
@@ -82,15 +97,39 @@ export default class Repository extends Component {
         });
     };
 
-    handlePaginate = async page => {
+    handlePaginate = () => {
+        const { page: currentPage } = this.state;
+        const page = currentPage > 1 ? 1 : 2;
         this.setState({ page });
     };
 
     render() {
-        const { repository, issues, loading, page } = this.state;
+        const { repository, issues, loading, page, error } = this.state;
 
         if (loading) {
-            return <Loading>Carregando</Loading>;
+            return (
+                <>
+                    <Loading loading={loading < 1 ? 1 : 0}>
+                        <span>Carregando</span>
+                        <FaSpinner size={20} />
+                    </Loading>
+                    <Message>
+                        {error ? (
+                            <>
+                                <small>
+                                    Ocorreu algum erro durante a requisição{' '}
+                                </small>
+                                <FaFrownOpen size={16} />
+                            </>
+                        ) : (
+                            <>
+                                <small>Pronto</small>
+                                <FaCheck size={16} />
+                            </>
+                        )}
+                    </Message>
+                </>
+            );
         }
 
         return (
@@ -139,9 +178,7 @@ export default class Repository extends Component {
                 <Paginator>
                     <li>
                         <PaginatorButton
-                            onClick={() => {
-                                this.handlePaginate(1);
-                            }}
+                            onClick={this.handlePaginate}
                             disabled={page < 2 ? 1 : 0}
                         >
                             <FaArrowLeft />
@@ -152,9 +189,7 @@ export default class Repository extends Component {
                     </li>
                     <li>
                         <PaginatorButton
-                            onClick={() => {
-                                this.handlePaginate(2);
-                            }}
+                            onClick={this.handlePaginate}
                             disabled={page > 1 ? 1 : 0}
                         >
                             <FaArrowRight />

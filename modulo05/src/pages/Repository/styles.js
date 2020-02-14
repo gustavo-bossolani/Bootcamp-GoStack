@@ -1,13 +1,48 @@
-import styled from 'styled-components';
+import styled, { keyframes, css } from 'styled-components';
+
+const rotate = keyframes`
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+`;
 
 export const Loading = styled.div`
     color: #fff;
     font-size: 30px;
     font-weight: bold;
     display: flex;
+    flex-direction: row;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    margin-top: 50vh;
+
+    span {
+        margin-right: 10px;
+    }
+
+    svg {
+        animation: ${rotate} 0.8s linear infinite;
+    }
+`;
+
+export const Message = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    color: #eee;
+
+    small {
+        font-size: 16px;
+        align-items: center;
+    }
+
+    svg {
+        margin-left: 5px;
+    }
 `;
 
 export const Owner = styled.header`
@@ -43,8 +78,8 @@ export const Owner = styled.header`
 `;
 
 export const IssueList = styled.ul`
-    padding: 30px;
-    margin-top: 15px;
+    padding: 15px 30px 30px 30px;
+    margin-top: 10px;
     list-style: none;
 
     span {
@@ -109,28 +144,26 @@ export const IssueList = styled.ul`
 `;
 
 export const Filters = styled.div`
-    margin-top: 35px;
-    padding: 20px;
+    margin-top: 25px;
+    padding: 10px;
     border-top: 1px solid #eee;
-    text-align: center;
+    text-align: start;
 
     span {
         font-size: 16px;
-        font-weight: bold;
-        margin-right: 10px;
+        margin-right: 5px;
+        font-weight: 400;
     }
 
     select {
-        width: 100%;
         font-size: 14px;
-        padding: 10px;
-        border: 1px solid #eee;
+        border: 1px solid #7159c1;
+        background-image: none;
         -webkit-appearance: none;
-        -moz-appearance: none;
-
-        option:hover {
-            background: #7159c1;
-        }
+        text-align: center;
+        font-weight: bold;
+        border-radius: 4px;
+        color: #7159c1;
     }
 `;
 
@@ -166,11 +199,15 @@ export const PaginatorButton = styled.button.attrs(props => ({
     flex-direction: row;
     align-items: center;
 
-    &:focus,
-    &:hover {
-        background: #7159c1;
-        color: #eee;
-    }
+    ${props =>
+        !props.disabled &&
+        css`
+            &:focus,
+            &:hover {
+                background: #7159c1;
+                color: #eee;
+            }
+        `}
 
     &[disabled] {
         cursor: not-allowed;
