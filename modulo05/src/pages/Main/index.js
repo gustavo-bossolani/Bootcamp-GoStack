@@ -12,7 +12,7 @@ export default class Main extends Component {
         newRepo: '',
         repositories: [],
         loading: false,
-        error: false,
+        error: null,
     };
 
     // Carregar os dados do localStorage
@@ -37,24 +37,24 @@ export default class Main extends Component {
     };
 
     handleSubmit = async event => {
+        event.preventDefault();
+        this.setState({ loading: true, error: false });
         try {
-            event.preventDefault();
-            this.setState({ loading: true, error: false });
-
             const { newRepo, repositories } = this.state;
+
+            if (newRepo === '')
+                throw new Error('Você precisa indicar um repositório');
+            const hasRepo = repositories.find(repo => repo.name === newRepo);
+            if (hasRepo) {
+                this.setState({ newRepo: '' });
+                throw new Error('Repositório Duplicado.');
+            }
+
             const response = await api.get(`/repos/${newRepo}`);
 
             const data = {
                 name: response.data.full_name,
             };
-
-            const double = repositories.find(
-                element => element.name === data.name
-            );
-            if (double) {
-                this.setState({ newRepo: '' });
-                throw new Error('Repositório Duplicado.');
-            }
 
             this.setState({
                 repositories: [...repositories, data],
@@ -62,7 +62,9 @@ export default class Main extends Component {
                 loading: false,
             });
         } catch (err) {
-            this.setState({ loading: false, error: true });
+            this.setState({ error: true });
+        } finally {
+            this.setState({ loading: false });
         }
     };
 

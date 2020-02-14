@@ -97,10 +97,9 @@ export default class Repository extends Component {
         });
     };
 
-    handlePaginate = () => {
-        const { page: currentPage } = this.state;
-        const page = currentPage > 1 ? 1 : 2;
-        this.setState({ page });
+    handlePaginate = action => {
+        const { page } = this.state;
+        this.setState({ page: action === 'back' ? page - 1 : page + 1 });
     };
 
     render() {
@@ -178,7 +177,9 @@ export default class Repository extends Component {
                 <Paginator>
                     <li>
                         <PaginatorButton
-                            onClick={this.handlePaginate}
+                            onClick={() => {
+                                this.handlePaginate('back');
+                            }}
                             disabled={page < 2 ? 1 : 0}
                         >
                             <FaArrowLeft />
@@ -189,7 +190,9 @@ export default class Repository extends Component {
                     </li>
                     <li>
                         <PaginatorButton
-                            onClick={this.handlePaginate}
+                            onClick={() => {
+                                this.handlePaginate('next');
+                            }}
                             disabled={page > 1 ? 1 : 0}
                         >
                             <FaArrowRight />
