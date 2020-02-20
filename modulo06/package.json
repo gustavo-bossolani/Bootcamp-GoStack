@@ -12,7 +12,8 @@
   "dependencies": {
     "react": "16.9.0",
     "react-native": "0.61.5",
-    "react-native-cli": "^2.0.1"
+    "react-native-cli": "^2.0.1",
+    "reactotron-react-native": "^4.0.3"
   },
   "devDependencies": {
     "@babel/core": "^7.6.2",
