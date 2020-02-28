@@ -26,14 +26,17 @@ function Routes() {
                 <Stack.Screen
                     name="User"
                     component={User}
-                    options={{
-                        title: 'Usuário',
+                    options={({ route }) => ({
+                        title: route.params.user.name,
                         headerStyle: {
                             backgroundColor: '#7159c1',
                         },
+                        headerTitleStyle: {
+                            margin: 30,
+                        },
                         headerTintColor: '#eee',
                         headerTitleAlign: 'center',
-                    }}
+                    })}
                 />
             </Stack.Navigator>
         </NavigationContainer>
